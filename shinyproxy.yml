@@ -23,7 +23,8 @@ services:
           - "traefik.enable=true"
           - "traefik.http.routers.shinyproxy.rule=Host(`app.databentobox.com`)"
           - "traefik.http.routers.shinyproxy.entrypoints=http"
-          - "traefik.http.services.shinyproxy.loadbalancer.server.port=8080"
+          - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+          - "traefik.http.middlewares.https-redirect.redirectscheme.permanent=true"
           - "traefik.http.routers.shinyproxy-secured.rule=Host(`app.databentobox.com`)"
           - "traefik.http.routers.shinyproxy-secured.entrypoints=https"
           - "traefik.http.routers.shinyproxy-secured.tls.certresolver=le"
@@ -36,4 +37,6 @@ services:
 
 networks:
   sp-net:
+    external: true
   traefik-public:
+    external: true
