@@ -1,0 +1,52 @@
+proxy:
+  title: My Awesome Shiny Portal
+  port: 8080 # use Port 8080 for ShinyProxy
+  
+  container-wait-time: 30000 # how long should we wait for the container to spin up (30s as default as this is enough for our Shiny apps)
+  heartbeat-rate: 10000 # the user's browser will send a heartbeat call every heartbeat-rate milliseconds (10s as default)
+  heartbeat-timeout: 60000 # if the server does not receive a heartbeat for heartbeat-timeout milliseconds, the relevant proxy will be released (60s as default)
+
+  # usage-stats-url: http://{your_InfluxDB_instance_domain}:8086/write?db=shinyproxy_usagestats # use InfluxDB to store usage statistics; can be in a different server
+  # usage-stats-username: xxxx # influxdb username if needed
+  # usage-stats-password: xxxx # influxdb password if needed
+
+  #### OpenID Connect Authentication ####
+  # authentication: openid # use openid auth framework
+  # openid:
+  #   roles-claim: cognito:groups # use the groups value passed by AWS cognito to identify user groups
+  #   auth-url: # https://{cognito_domain_prefix}.auth.{region}.amazoncognito.com/oauth2/authorize
+  #   token-url: # https://{cognito_domain_prefix}.auth.{region}.amazoncognito.com/oauth2/token
+  #   jwks-url: # https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
+  #   logout-url: # https://{cognito_domain_prefix}.auth.{region}.amazoncognito.com/logout?client_id={client_id}&logout_uri={your_host_url}
+  #   client-id:  # get this from AWS Cognito user pool management page
+  #   client-secret:  # get this from AWS Cognito user pool management page
+  
+  #### Simple Authentication ####
+  authentication: simple
+  admin-groups: admins
+  users:
+  - name: admin
+    password: admin
+    groups: admins
+  
+  # Set the container backend: The container-backend can be one of docker (default), docker-swarm or kubernetes
+  container-backend: docker-swarm
+  
+  docker:
+      internal-networking: true
+  
+  # Below is a list of Shiny apps and their config
+  specs:
+    - id: euler
+      display-name: Euler's number
+      container-cmd: ["R", "-e", "shiny::runApp('/root/euler')"]
+      container-image: presstofan/shiny-euler-app # this need to be replaced with your own Shiny app in production
+      access-groups: admins # give specific access right to a group
+      container-network: sp-net
+
+server:
+  useForwardHeaders: true # this is very important to make the AWS Cognito auth works
+
+logging:
+  file:
+    shinyproxy.log

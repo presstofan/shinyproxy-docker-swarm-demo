@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+
+  shinyproxy:
+    image: presstofan/shinyproxy-example
+    # The labels section is where you specify configuration values for Traefik. 
+    # Docker labels don’t do anything by themselves, but Traefik reads these so 
+    # it knows how to treat containers.
+    labels:
+      - traefik.http.routers.shinyproxy.rule=Host(`app.databentobox.com`)
+      - traefik.http.services.shinyproxy-service.loadbalancer.server.port=8080
+    ports:
+      - "8080"
+    networks:
+      - sp-net
+      - traefik-public
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - "node.role==manager"
+    volumes:
+      - ./application/application.yml:/opt/shinyproxy/application.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+  
+  euler:
+    image: presstofan/shiny-euler-app
+
+networks:
+  sp-net:
+  traefik-public:
