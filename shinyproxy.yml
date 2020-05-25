@@ -20,8 +20,13 @@ services:
         constraints:
           - "node.role==manager"
       labels:
-          - traefik.http.routers.shinyproxy.rule=Host(`app.databentobox.com`)
-          - traefik.http.services.shinyproxy-service.loadbalancer.server.port=8080
+          - "traefik.enable=true"
+          - "traefik.http.routers.shinyproxy.rule=Host(`app.databentobox.com`)"
+          - "traefik.http.routers.shinyproxy.entrypoints=http"
+          - "traefik.http.services.shinyproxy.loadbalancer.server.port=8080"
+          - "traefik.http.routers.shinyproxy-secured.rule=Host(`app.databentobox.com`)"
+          - "traefik.http.routers.shinyproxy-secured.entrypoints=https"
+          - "traefik.http.routers.shinyproxy-secured.tls.certresolver=le"
     volumes:
       - ./application/application.yml:/opt/shinyproxy/application.yml
       - /var/run/docker.sock:/var/run/docker.sock
