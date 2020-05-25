@@ -7,8 +7,8 @@ services:
     # The labels section is where you specify configuration values for Traefik. 
     # Docker labels don’t do anything by themselves, but Traefik reads these so 
     # it knows how to treat containers.
-    # ports:
-    #   - "8080"
+    ports:
+      - "8080"
     networks:
       - traefik-public
       - sp-net
@@ -28,6 +28,7 @@ services:
           - "traefik.http.routers.shinyproxy-secured.rule=Host(`app.databentobox.com`)"
           - "traefik.http.routers.shinyproxy-secured.entrypoints=https"
           - "traefik.http.routers.shinyproxy-secured.tls.certresolver=le"
+          - "traefik.http.services.shinyproxy.loadbalancer.server.port=8080"
     volumes:
       - ./application/application.yml:/opt/shinyproxy/application.yml
       - /var/run/docker.sock:/var/run/docker.sock
