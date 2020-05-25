@@ -21,7 +21,7 @@ services:
           - "node.role==manager"
       labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.shinyproxy-frontend-http.rule=PathPrefix(`/`)""
+          - "traefik.http.routers.shinyproxy-frontend-http.rule=PathPrefix(`/`)"
           - "traefik.http.services.shinyproxy-frontend.loadbalancer.server.port=8080"
           # - "traefik.http.routers.shinyproxy.rule=Host(`app.databentobox.com`)"
           # - "traefik.http.routers.shinyproxy.entrypoints=http"
