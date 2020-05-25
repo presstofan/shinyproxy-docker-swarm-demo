@@ -35,6 +35,8 @@ services:
   
   euler:
     image: presstofan/shiny-euler-app
+    networks:
+      - sp-net
 
 networks:
   traefik-public:
