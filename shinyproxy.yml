@@ -22,6 +22,7 @@ services:
       labels:
           - traefik.enable=true
           - traefik.docker.network=traefik-public
+          - traefik.constraint-label=traefik-public
           - traefik.http.routers.shinyproxy.rule=Host(`sys.databentobox.com`)
           - traefik.http.routers.shinyproxy.entrypoints=http
           - traefik.http.middlewares.shinyproxy.redirectscheme.scheme=https
