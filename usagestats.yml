@@ -1,0 +1,63 @@
+version: '3.3'
+
+services:
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000
+    networks:
+      - traefik-public
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+      labels:
+          - traefik.enable=true
+          - traefik.docker.network=traefik-public
+          - traefik.constraint-label=traefik-public
+          - traefik.http.routers.shinyproxy.rule=Host(`grafana.app.databentobox.com`)
+          - traefik.http.routers.shinyproxy.entrypoints=http
+          - traefik.http.middlewares.shinyproxy.redirectscheme.scheme=https
+          - traefik.http.middlewares.shinyproxy.redirectscheme.permanent=true
+          - traefik.http.routers.shinyproxy-secured.rule=Host(`sys.databentobox.com`)
+          - traefik.http.routers.shinyproxy-secured.entrypoints=https
+          - traefik.http.routers.shinyproxy-secured.tls.certresolver=le
+          - traefik.http.services.shinyproxy-secured.loadbalancer.server.port=8080
+    volumes:
+      - grafana:/var/lib/grafana
+  
+  influxdb:
+    image: influxdb
+    ports:
+      - 8086
+    networks:
+      - traefik-public
+      - sp-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role==manager
+    environment:
+      INFLUXDB_DB: project_dev
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: admin
+      INFLUXDB_HTTP_AUTH_ENABLED: "true" # need to delete volume if change the database environment 
+    volumes:
+        - influxdb:/var/lib/influxdb
+
+networks:
+  traefik-public:
+    external: true
+  sp-net:
+    external: true
+
+volumes:
+  grafana:
+  influxdb:
