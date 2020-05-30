@@ -20,17 +20,17 @@ services:
         constraints:
           - node.role==manager
       labels:
-          - traefik.enable=true
-          - traefik.docker.network=traefik-public
-          - traefik.constraint-label=traefik-public
-          - traefik.http.routers.shinyproxy.rule=Host(`${APP_DOMAIN?Variable not set}`)
+          - traefik.enable=true # enable traefik
+          - traefik.docker.network=traefik-public # put it in the same network as traefik
+          - traefik.constraint-label=traefik-public # assign the same label as traefik so it can be discovered
+          - traefik.http.routers.shinyproxy.rule=Host(`${APP_DOMAIN?Variable not set}`) # listen to port 80 for request to APP_DOMAIN (use together with the line below)
           - traefik.http.routers.shinyproxy.entrypoints=http
-          - traefik.http.middlewares.shinyproxy.redirectscheme.scheme=https
-          - traefik.http.middlewares.shinyproxy.redirectscheme.permanent=true
-          - traefik.http.routers.shinyproxy-secured.rule=Host(`${APP_DOMAIN?Variable not set}`)
+          - traefik.http.middlewares.shinyproxy.redirectscheme.scheme=https # redirect traffic to https
+          - traefik.http.middlewares.shinyproxy.redirectscheme.permanent=true # redirect traffic to https
+          - traefik.http.routers.shinyproxy-secured.rule=Host(`${APP_DOMAIN?Variable not set}`) # listen to port 443 for request to APP_DOMAIN (use together with the line below)
           - traefik.http.routers.shinyproxy-secured.entrypoints=https
-          - traefik.http.routers.shinyproxy-secured.tls.certresolver=le
-          - traefik.http.services.shinyproxy-secured.loadbalancer.server.port=8080
+          - traefik.http.routers.shinyproxy-secured.tls.certresolver=le # use the Let's Encrypt certificate we set up earlier
+          - traefik.http.services.shinyproxy-secured.loadbalancer.server.port=8080 # ask Traefik to search for port 8080 of the shinyproxy service container
     volumes:
       - ./application/application.yml:/opt/shinyproxy/application.yml
       - /var/run/docker.sock:/var/run/docker.sock
