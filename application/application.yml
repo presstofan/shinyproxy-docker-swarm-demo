@@ -29,6 +29,9 @@ proxy:
   - name: admin
     password: admin
     groups: admins
+  - name: test
+    password: test
+    groups: admins
   
   # Set the container backend: The container-backend can be one of docker (default), docker-swarm or kubernetes
   container-backend: docker-swarm
