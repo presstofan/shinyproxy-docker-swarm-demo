@@ -6,6 +6,7 @@ proxy:
   heartbeat-rate: 10000 # the user's browser will send a heartbeat call every heartbeat-rate milliseconds (10s as default)
   heartbeat-timeout: 60000 # if the server does not receive a heartbeat for heartbeat-timeout milliseconds, the relevant proxy will be released (60s as default)
 
+  #### Set Up Usage Statistics Monitoring
   # usage-stats-url: http://{your_InfluxDB_instance_domain}:8086/write?db=shinyproxy_usagestats # use InfluxDB to store usage statistics; can be in a different server
   # usage-stats-username: xxxx # influxdb username if needed
   # usage-stats-password: xxxx # influxdb password if needed
@@ -21,7 +22,7 @@ proxy:
   #   client-id:  # get this from AWS Cognito user pool management page
   #   client-secret:  # get this from AWS Cognito user pool management page
   
-  #### Simple Authentication ####
+  #### Simple Authentication (for demo only, don't use in production) ####
   authentication: simple
   admin-groups: admins
   users:
