@@ -7,7 +7,7 @@ proxy:
   heartbeat-timeout: 60000 # if the server does not receive a heartbeat for heartbeat-timeout milliseconds, the relevant proxy will be released (60s as default)
 
   #### Set Up Usage Statistics Monitoring
-  # usage-stats-url: http://{your_InfluxDB_instance_domain}:8086/write?db=shinyproxy_usagestats # use InfluxDB to store usage statistics; can be in a different server
+  # usage-stats-url: http://influxdb:8086/write?db=shinyproxy_usagestats # use InfluxDB to store usage statistics; can be in a different server
   # usage-stats-username: xxxx # influxdb username if needed
   # usage-stats-password: xxxx # influxdb password if needed
 
