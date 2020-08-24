@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
 
-  shinyproxy:
+  euler:
     image: presstofan/shiny-euler-app
     # The labels section is where you specify configuration values for Traefik.
     # Docker labels don’t do anything by themselves, but Traefik reads these so
