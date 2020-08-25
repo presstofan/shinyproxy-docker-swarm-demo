@@ -23,14 +23,14 @@ services:
           - traefik.enable=true # enable traefik
           - traefik.docker.network=traefik-public # put it in the same network as traefik
           - traefik.constraint-label=traefik-public # assign the same label as traefik so it can be discovered
-          - traefik.http.routers.shinyproxy.rule=Host(`${APP_DOMAIN?Variable not set}`) # listen to port 80 for request to APP_DOMAIN (use together with the line below)
-          - traefik.http.routers.shinyproxy.entrypoints=http
-          - traefik.http.middlewares.shinyproxy.redirectscheme.scheme=https # redirect traffic to https
-          - traefik.http.middlewares.shinyproxy.redirectscheme.permanent=true # redirect traffic to https
-          - traefik.http.routers.shinyproxy-secured.rule=Host(`${APP_DOMAIN?Variable not set}`) # listen to port 443 for request to APP_DOMAIN (use together with the line below)
-          - traefik.http.routers.shinyproxy-secured.entrypoints=https
-          - traefik.http.routers.shinyproxy-secured.tls.certresolver=le # use the Let's Encrypt certificate we set up earlier
-          - traefik.http.services.shinyproxy-secured.loadbalancer.server.port=3838 # ask Traefik to search for port 3838 of the shinyproxy service container
+          - traefik.http.routers.euler.rule=Host(`${APP_DOMAIN?Variable not set}`) # listen to port 80 for request to APP_DOMAIN (use together with the line below)
+          - traefik.http.routers.euler.entrypoints=http
+          - traefik.http.middlewares.euler.redirectscheme.scheme=https # redirect traffic to https
+          - traefik.http.middlewares.euler.redirectscheme.permanent=true # redirect traffic to https
+          - traefik.http.routers.euler-secured.rule=Host(`${APP_DOMAIN?Variable not set}`) # listen to port 443 for request to APP_DOMAIN (use together with the line below)
+          - traefik.http.routers.euler-secured.entrypoints=https
+          - traefik.http.routers.euler-secured.tls.certresolver=le # use the Let's Encrypt certificate we set up earlier
+          - traefik.http.services.euler-secured.loadbalancer.server.port=3838 # ask Traefik to search for port 3838 of the euler app service container
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
